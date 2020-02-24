@@ -1,10 +1,12 @@
 <template>
   <div class="home">
     <div>
+      <v-icon>fa fa-ban</v-icon>
+      <v-icon>fa fa-clone</v-icon>
       <h2>No more duplicates...</h2>
     </div>
 
-    <duplicates-list class="mt-2 pa-3" />
+    <duplicates-list />
   </div>
 </template>
 

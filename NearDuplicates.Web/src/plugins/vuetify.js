@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
-import 'vuetify/src/styles/main.sass'
 
 Vue.use(Vuetify, {
   theme: {
@@ -16,3 +15,5 @@ Vue.use(Vuetify, {
     customProperties: true
   }
 })
+
+export default new Vuetify({})
