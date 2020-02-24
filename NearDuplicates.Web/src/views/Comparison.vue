@@ -7,21 +7,82 @@
         </v-btn>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col>
         <h3>Title</h3>
       </v-col>
+      <v-col>
+        <h3>Price</h3>
+      </v-col>
     </v-row>
+
     <v-row>
       <v-col>
-        <span class="id caption">{{ comparison.baseListing.id }}</span>
-        <span class="headline">{{ comparison.baseListing.title }}</span>
+        <v-container>
+          <v-row>
+            <v-col class="flex-grow-0">
+              <span class="caption">{{ comparison.baseListing.id }}</span>
+            </v-col>
+            <v-col>
+              <span class="subtitle-2">{{ comparison.baseListing.title }}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="flex-grow-0">
+              <span class="caption">{{ comparison.closestDuplicateByTitle.id }}</span>
+            </v-col>
+            <v-col>
+              <span class="subtitle-2">{{ comparison.closestDuplicateByTitle.title }}</span>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+      <v-col>
+        <v-container>
+          <v-row>
+            <v-col class="flex-grow-0">
+              <span class="caption">{{ comparison.baseListing.id }}</span>
+            </v-col>
+            <v-col>
+              <span class="subtitle-2">${{ comparison.baseListing.buy_now_price }}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="flex-grow-0">
+              <span class="caption">{{ comparison.closestDuplicateByTitle.id }}</span>
+            </v-col>
+            <v-col>
+              <span class="subtitle-2">${{ comparison.closestDuplicateByTitle.buy_now_price }}</span>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+    </v-row>
+
+    <v-row class="mt-4">
+      <v-col>
+        <h3>Description</h3>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <span class="id caption">{{ comparison.closestDuplicateByTitle.id }}</span>
-        <span>{{ comparison.closestDuplicateByTitle.title }}</span>
+        <span class="caption">{{ comparison.baseListing.id }}</span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <span class="body-2">{{ comparison.baseListing.description }}</span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <span class="caption">{{ comparison.closestDuplicateByTitle.id }}</span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <span class="body-2">{{ comparison.closestDuplicateByTitle.description }}</span>
       </v-col>
     </v-row>
   </v-container>
@@ -52,9 +113,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.id {
-  min-width: 160px;
-  max-width: 160px;
-}
-</style>
+<style lang="scss" scoped></style>
