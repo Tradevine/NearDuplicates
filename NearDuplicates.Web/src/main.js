@@ -9,8 +9,9 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css'
 
 Vue.config.productionTip = false
 
-new Vue({
+window.vm = new Vue({
+  el: '#app',
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+})

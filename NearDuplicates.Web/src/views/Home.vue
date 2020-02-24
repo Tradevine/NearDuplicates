@@ -1,7 +1,10 @@
 <template>
   <div class="home">
-    <h2>Near duplicates list</h2>
-    <duplicates-list />
+    <div>
+      <h2>No more duplicates...</h2>
+    </div>
+
+    <duplicates-list class="mt-2 pa-3" />
   </div>
 </template>
 
