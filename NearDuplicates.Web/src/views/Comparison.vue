@@ -1,18 +1,30 @@
 <template>
-  <div class="comparison text-left">
-    <v-btn text color="primary light" icon @click="goBack()" title="Back">
-      <v-icon medium>fa-arrow-circle-left</v-icon>
-    </v-btn>
-    <h3>Title</h3>
-    <div class="float-left">
-      <span class="id caption">{{ comparison.baseListing.id }}</span>
-      <span>{{ comparison.baseListing.title }}</span>
-    </div>
-    <div class="float-left">
-      <span class="id caption">{{ comparison.closestDuplicateByTitle.id }}</span>
-      <span>{{ comparison.closestDuplicateByTitle.title }}</span>
-    </div>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-btn text color="primary light" icon @click="goBack()" title="Back">
+          <v-icon medium>fa-arrow-circle-left</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <h3>Title</h3>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <span class="id caption">{{ comparison.baseListing.id }}</span>
+        <span class="headline">{{ comparison.baseListing.title }}</span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <span class="id caption">{{ comparison.closestDuplicateByTitle.id }}</span>
+        <span>{{ comparison.closestDuplicateByTitle.title }}</span>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
