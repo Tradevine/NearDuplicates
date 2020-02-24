@@ -1,6 +1,6 @@
 <template>
   <div class="list">
-    <ag-grid-vue style="width: 100%; height: 75vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="listings" />
+    <ag-grid-vue style="width: 100%; height: 90vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="listings" />
   </div>
 </template>
 
@@ -18,7 +18,8 @@ export default {
       gridOptions: {
         animateRows: true,
         enableCellTextSelection: true,
-        rowSelection: 'multiple'
+        rowSelection: 'multiple',
+        onRowDoubleClicked: this.selectListing
       }
     }
   },
@@ -33,7 +34,9 @@ export default {
         headerClass: 'text-xs-left',
         resizable: true,
         sortable: true,
-        filter: 'agTextColumnFilter'
+        filter: 'agNumberColumnFilter',
+        minWidth: 140,
+        maxWidth: 140
       },
       {
         headerName: 'Seller Name',
@@ -42,7 +45,9 @@ export default {
         headerClass: 'text-xs-left',
         resizable: true,
         sortable: true,
-        filter: 'agTextColumnFilter'
+        filter: 'agTextColumnFilter',
+        minWidth: 180,
+        maxWidth: 180
       },
       {
         headerName: 'Category',
@@ -60,7 +65,9 @@ export default {
         headerClass: 'text-xs-left',
         resizable: true,
         sortable: true,
-        filter: 'agTextColumnFilter'
+        filter: 'agNumberColumnFilter',
+        minWidth: 140,
+        maxWidth: 140
       },
       {
         headerName: 'Title',
@@ -85,6 +92,11 @@ export default {
   methods: {
     onResize() {
       this.gridOptions.api.sizeColumnsToFit()
+    },
+    selectListing(params) {
+      if (params.node.selected === false) return
+
+      this.$router.push(`/comparison/${params.data.id}`)
     }
   }
 }

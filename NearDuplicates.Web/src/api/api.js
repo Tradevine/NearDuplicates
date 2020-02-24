@@ -49,5 +49,8 @@ export default {
   },
   getListings() {
     return apiAxios.get('/Listings/GetDuplicatesList')
+  },
+  getComparison(listing_id) {
+    return apiAxios.get(`/Listings/GetComparison?listing_id=${listing_id}`)
   }
 }

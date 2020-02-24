@@ -8,7 +8,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     listings: [],
-    listing: {},
+    comparison: {
+      baseListing: {},
+      closestDuplicateByTitle: {},
+      closestDuplicateByDescription: {}
+    },
     showSpinner: false,
     showSnackbar: false,
     snackbarText: '',
@@ -17,6 +21,9 @@ export default new Vuex.Store({
   getters: {
     listings: state => {
       return state.listings
+    },
+    comparison: state => {
+      return state.comparison
     }
   },
   actions: {
@@ -25,6 +32,16 @@ export default new Vuex.Store({
         .getListings()
         .then(response => {
           commit('setListings', response.data)
+        })
+        .catch(e => {
+          dispatch('handleError', e, { root: true })
+        })
+    },
+    getComparison({ commit, dispatch }, listing_id) {
+      api
+        .getComparison(listing_id)
+        .then(response => {
+          commit('setComparison', response.data)
         })
         .catch(e => {
           dispatch('handleError', e, { root: true })
@@ -50,6 +67,9 @@ export default new Vuex.Store({
   mutations: {
     setListings(state, listings) {
       state.listings = listings
+    },
+    setComparison(state, comparison) {
+      state.comparison = comparison
     },
     showSpinner: set('showSpinner'),
     showSnackbar: set('showSnackbar'),

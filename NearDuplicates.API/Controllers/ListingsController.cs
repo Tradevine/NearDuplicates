@@ -30,7 +30,7 @@ namespace NearDuplicates.API.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Options | HttpVerbs.Get)]
-        public JsonResult GetDuplicate(long id)
+        public JsonResult GetComparison(long listing_id)
         {
             if(IsPreFlight())
                 return new JsonResult();
@@ -38,7 +38,7 @@ namespace NearDuplicates.API.Controllers
             var context = new NearDuplicatesDbContext();
             var query = context.Listings.AsQueryable();
 
-            var baseListing = query.First<Listing>(x => x.id == id);
+            var baseListing = query.First<Listing>(x => x.id == listing_id);
             var closestDuplicateByTitle = baseListing.likely_duplicate_id_by_title.HasValue ? query.FirstOrDefault(x => x.id == baseListing.likely_duplicate_id_by_title) : null;
             var closestDuplicateByDescription = baseListing.likely_duplicate_id_by_description.HasValue ? query.FirstOrDefault(x => x.id == baseListing.likely_duplicate_id_by_description) : null;
 
