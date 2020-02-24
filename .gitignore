@@ -1,0 +1,62 @@
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.jfm
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+Code/Logs
+*.dbmdl
+*.dbproj.schemaview
+*.webtestresult
+.sass-cache/
+*.scssc
+*.sublime-workspace
+*.js.map
+
+.idea/workspace.xml
+.idea/dictionaries
+*.ncrunchsolution
+packages/
+
+.yarn-integrity
+.yarnclean
+
+npm-debug.log*
+
+dist
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm

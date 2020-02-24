@@ -1,0 +1,19 @@
+{
+  "save-runner.enabled": true,
+  "save-runner.autoClearConsole": true,
+  "save-runner.commands": [
+    {
+      "enabled": true,
+      "include": "\\.vue",
+      "exclude": "/node_modules/",
+      "post": "yarn lint"
+    }
+  ],
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.requireConfig": true,
+  "prettier.vueIndentScriptAndStyle": true,
+  "prettier.printWidth": 160,
+  "prettier.semi": false
+}

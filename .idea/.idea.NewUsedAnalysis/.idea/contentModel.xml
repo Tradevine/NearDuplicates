@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Git\LTI\Utils\NewUsedAnalysis" t="IncludeFlat">
+      <e p="NewUsedAnalysis.Console" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="NewUsedAnalysis.Console.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+      </e>
+      <e p="NewUsedAnalysis.Model" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="LTI.Domain.dll" t="Include" />
+        <e p="Migrations" t="Include">
+          <e p="201802210224043_Baseline.cs" t="Include" />
+          <e p="201802210224043_Baseline.Designer.cs" t="Include" />
+          <e p="201802210224043_Baseline.resx" t="Include" />
+          <e p="201802210325502_Bigint changes.cs" t="Include" />
+          <e p="201802210325502_Bigint changes.Designer.cs" t="Include" />
+          <e p="201802210325502_Bigint changes.resx" t="Include" />
+          <e p="201802210354471_MP rep column.cs" t="Include" />
+          <e p="201802210354471_MP rep column.Designer.cs" t="Include" />
+          <e p="201802210354471_MP rep column.resx" t="Include" />
+          <e p="201802220108541_Add promotion fields.cs" t="Include" />
+          <e p="201802220108541_Add promotion fields.Designer.cs" t="Include" />
+          <e p="201802220108541_Add promotion fields.resx" t="Include" />
+          <e p="Configuration.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="SearchResult.cs" t="Include" />
+          <e p="SearchTerm.cs" t="Include" />
+          <e p="SearchTermCount.cs" t="Include" />
+        </e>
+        <e p="NewUsedAnalysis.Model.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Repository" t="Include">
+          <e p="SearchAnalysisDbContext.cs" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="SearchTermDownloader.cs" t="Include" />
+          <e p="SearchTermExecutor.cs" t="Include" />
+        </e>
+      </e>
+      <e p="NewUsedAnalysis.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+    <e p="C:\Users\ewilliams\.Rider2019.3\config\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\ewilliams\.Rider2019.3\config\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\ewilliams\.Rider2019.3\config\scratches" t="IncludeRecursive" />
+    <e p="C:\Users\ewilliams\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\ewilliams\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_NewUsedAnalysis.1366421915.00" t="ExcludeRecursive" />
+  </component>
+</project>
