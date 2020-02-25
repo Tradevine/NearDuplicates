@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using NearDuplicatesAnalysis.Model.Helpers;
 using NearDuplicatesAnalysis.Model.Models;
 
@@ -79,7 +80,6 @@ namespace NearDuplicatesAnalysis.Model.Services
 
             for (int listing = 0; listing < listings.Count; listing++)
             {
-
                 var nearest = lsh.GetNearest(listing);
                 if(!nearest.Any())
                     continue;
@@ -92,6 +92,7 @@ namespace NearDuplicatesAnalysis.Model.Services
                     continue;
 
                 listings[listing].likely_duplicate_id_by_title = nearestListing.id;
+                listings[listing].similarity_title = Jaccard.Calc(ArrayHelpers.GetRow<int>(matrix, listing).ToList(), nearest);
             }
         }
     }

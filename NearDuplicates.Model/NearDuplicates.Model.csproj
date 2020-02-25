@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ArrayHelpers.cs" />
     <Compile Include="Helpers\Jaccard.cs" />
     <Compile Include="Helpers\LSH.cs" />
     <Compile Include="Helpers\MinHash.cs" />

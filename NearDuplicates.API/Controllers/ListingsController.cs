@@ -45,8 +45,7 @@ namespace NearDuplicates.API.Controllers
             var output = new
             {
                 baseListing,
-                closestDuplicateByTitle = closestDuplicateByTitle ?? closestDuplicateByDescription,
-                closestDuplicateByDescription = closestDuplicateByDescription ?? closestDuplicateByTitle
+                duplicate = closestDuplicateByTitle ?? closestDuplicateByDescription,
             };
 
             return Json(output, JsonRequestBehavior.AllowGet);

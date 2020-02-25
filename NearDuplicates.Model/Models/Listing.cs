@@ -14,8 +14,11 @@ namespace NearDuplicatesAnalysis.Model.Models
         public string title { get; set; }
         public decimal? buy_now_price { get; set; }
         public string description { get; set; }
+        public int? photo_id { get; set; }
         public long? likely_duplicate_id_by_title { get; set; }
         public long? likely_duplicate_id_by_description { get; set; }
+        public double similarity_title { get; set; }
+        public double similarity_description { get; set; }
 
         public virtual IDictionary<string, int> ngrams_title { get; set; } = new Dictionary<string, int>();
         public virtual List<int> word_ids_title { get; set; } = new List<int>();

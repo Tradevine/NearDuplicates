@@ -42,6 +42,7 @@ namespace NearDuplicatesAnalysis.Model.Services
                         title = results.GetString(5),
                         buy_now_price = results.GetDecimal(6),
                         description = results.GetString(7),
+                        photo_id = results.GetInt32(8)
                     };
 
                     output.Add(listing);

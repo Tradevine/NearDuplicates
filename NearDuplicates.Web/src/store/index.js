@@ -10,8 +10,7 @@ export default new Vuex.Store({
     listings: [],
     comparison: {
       baseListing: {},
-      closestDuplicateByTitle: {},
-      closestDuplicateByDescription: {}
+      duplicate: {}
     },
     showSpinner: false,
     showSnackbar: false,

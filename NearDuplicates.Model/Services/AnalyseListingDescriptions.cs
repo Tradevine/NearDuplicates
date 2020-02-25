@@ -91,6 +91,7 @@ namespace NearDuplicatesAnalysis.Model.Services
                     continue;
 
                 listings[listing].likely_duplicate_id_by_description = nearestListing.id;
+                listings[listing].similarity_description = Jaccard.Calc(ArrayHelpers.GetRow<int>(matrix, listing).ToList(), nearest);
             }
         }
     }

@@ -42,6 +42,7 @@
         <e p="App.config" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="Helpers" t="Include">
+          <e p="ArrayHelpers.cs" t="Include" />
           <e p="Jaccard.cs" t="Include" />
           <e p="LSH.cs" t="Include" />
           <e p="MinHash.cs" t="Include" />

@@ -6,7 +6,8 @@ select
        c.mcat_path,
        a.title,
        a.BuyNowPrice,
-       ad.Body
+       ad.Body,
+       isnull(a.photo_id, 0) as photo_id
 from dbo.auction a with (nolock)
     join dbo.member m with (nolock) on m.MemberId = a.MemberId
     join dbo.category c with (nolock) on c.CategoryId = a.CategoryId
