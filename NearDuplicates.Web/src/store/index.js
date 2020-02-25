@@ -37,11 +37,12 @@ export default new Vuex.Store({
           dispatch('handleError', e, { root: true })
         })
     },
-    getComparison({ commit, dispatch }, listing_id) {
+    getComparison({ commit, dispatch }, args) {
       api
-        .getComparison(listing_id)
+        .getComparison(args.id)
         .then(response => {
           commit('setComparison', response.data)
+          args.callback()
         })
         .catch(e => {
           dispatch('handleError', e, { root: true })
