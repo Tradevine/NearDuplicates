@@ -7,7 +7,7 @@
     </v-row>
 
     <v-row>
-      <v-col class="d-flex justify-center">
+      <v-col class="d-flex justify-center photo">
         <v-img maxWidth="200" v-if="listing.photo_id" :src="`https://trademe.tmcdn.co.nz/photoserver/plusw/${listing.photo_id}.jpg`"></v-img>
       </v-col>
     </v-row>
@@ -59,4 +59,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.photo {
+  width: 30vw;
+  min-height: 170px;
+  max-height: 170px;
+}
+</style>
