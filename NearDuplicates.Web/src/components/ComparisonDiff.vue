@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!!duplicate">
     <v-row> </v-row>
 
     <v-row>
@@ -18,13 +18,13 @@
     <v-row>
       <v-col>
         <div class="caption">Price:</div>
-        <span class="subtitle-2">$ (price diff percent here)</span>
+        <span class="subtitle-2">{{ priceDiffPercent }}%</span>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col>
-        <span class="body-2" id="descDiff">{{ listing.description }}</span>
+        <span class="body-2" id="descDiff"></span>
       </v-col>
     </v-row>
   </v-container>
@@ -50,27 +50,30 @@ export default {
     }
   },
   data() {
-    return {}
-  },
-  beforeMount() {
-    this.displayTitleDiff()
-    this.displayDescriptionDiff()
+    return {
+      titleDiffs: [],
+      descDiffs: [],
+      priceDiff
+    }
   },
   computed: {
     titlesIdentical() {
-      return this.baseListing.title === this.duplicate.title
+      return this.baselisting.title === this.duplicate.title
     },
     descriptionsIdentical() {
-      return this.baseListing.description === this.duplicate.description
+      return this.baselisting.description === this.duplicate.description
+    },
+    priceDiffPercent() {
+      return (this.baselisting.buy_now_price / this.duplicate.buy_now_price) * 100
     }
   },
   methods: {
     displayTitleDiff() {
-      var diff = Diff.diffChars(this.comparison.baseListing.title, this.comparison.closestDuplicateByTitle.title)
+      var diff = Diff.diffChars(this.baselisting.title, this.duplicate.title)
       this.displayDiff(diff, 'titleDiff')
     },
     displayDescriptionDiff() {
-      var diff = Diff.diffWords(this.comparison.baseListing.description, this.comparison.closestDuplicateByTitle.description)
+      var diff = Diff.diffWords(this.baselisting.description, this.duplicate.description)
       this.displayDiff(diff, 'descDiff')
     },
     displayDiff(diff, targetId) {
@@ -87,6 +90,12 @@ export default {
       })
 
       target.appendChild(fragment)
+    }
+  },
+  watch: {
+    duplicate() {
+      this.displayTitleDiff()
+      this.displayDescriptionDiff()
     }
   }
 }

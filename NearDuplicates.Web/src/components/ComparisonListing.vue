@@ -1,12 +1,14 @@
 <template>
-  <v-container>
+  <v-container v-if="!!listing">
     <v-row>
-      <a :href="`https://www.trademe.co.nz//Browse/Listing.aspx?id=${listing.id}`" target="blank">{{ listing.id }}</a>
+      <v-col class="d-flex justify-center">
+        <a :href="`https://www.trademe.co.nz//Browse/Listing.aspx?id=${listing.id}`" target="blank">{{ listing.id }}</a>
+      </v-col>
     </v-row>
 
     <v-row>
-      <v-col>
-        <v-img width="200" :src="`https://trademe.tmcdn.co.nz/photoserver/plusw/${listing.photo_id}.jpg`"></v-img>
+      <v-col class="d-flex justify-center">
+        <v-img maxWidth="200" v-if="listing.photo_id" :src="`https://trademe.tmcdn.co.nz/photoserver/plusw/${listing.photo_id}.jpg`"></v-img>
       </v-col>
     </v-row>
 

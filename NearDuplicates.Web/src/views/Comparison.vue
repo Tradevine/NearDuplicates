@@ -10,13 +10,13 @@
     </v-row>
 
     <v-row>
-      <v-col>
-        <h3>Base Listing</h3>
+      <v-col class="d-flex justify-center">
+        <h3>Base Listing (A)</h3>
       </v-col>
-      <v-col>
-        <h3>Compared With</h3>
+      <v-col class="d-flex justify-center">
+        <h3>Compared With (B)</h3>
       </v-col>
-      <v-col>
+      <v-col class="d-flex justify-center">
         <h3>Diff</h3>
       </v-col>
     </v-row>
