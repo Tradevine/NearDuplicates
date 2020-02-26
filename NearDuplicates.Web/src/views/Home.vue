@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-show="!showSeller">
       <v-col>
         <h2>Near duplicates search</h2>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-show="!showSeller">
       <v-col class="d-inline-flex">
         <v-autocomplete
           :items="categories"
@@ -22,11 +22,15 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-row class="mt-2">
+    <v-row class="mt-2" v-show="!showSeller">
       <v-col>
         <h3 v-show="showSearching">Searching for sellers in this category...</h3>
         <h3 v-show="showAnalyzing">Analyzing duplicates in this category...</h3>
-        <sellers-list v-show="showGrid" :mcat_path.sync="selected_category_mcat" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <sellers-list v-show="showGrid" @showSeller="showSeller = true" @hideSeller="showSeller = false" :mcat_path.sync="selected_category_mcat" />
       </v-col>
     </v-row>
   </v-container>
@@ -46,7 +50,8 @@ export default {
       showSearching: false,
       showAnalyzing: false,
       showGrid: false,
-      showButtons: false
+      showButtons: false,
+      showSeller: false
     }
   },
   computed: {

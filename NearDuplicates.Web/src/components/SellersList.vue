@@ -98,10 +98,12 @@ export default {
       this.selected_seller_id = params.data.seller_id
       this.showSellerListings = true
       this.showSellers = false
+      this.$emit('showSeller')
     },
     closeSellerListings() {
       this.showSellerListings = false
       this.showSellers = true
+      this.$emit('hideSeller')
     }
   },
   watch: {

@@ -45,17 +45,14 @@ export default {
     ComparisonListing,
     ComparisonDiff
   },
-  data() {
-    return {
-      id: ''
+  props: {
+    id: {
+      type: Number,
+      default: 0
     }
   },
-  beforeMount() {
-    this.id = this.$route.params.id
-    this.$store.dispatch('getComparison', {
-      id: this.id,
-      callback: () => {}
-    })
+  data() {
+    return {}
   },
   computed: {
     comparison() {
@@ -68,9 +65,19 @@ export default {
       return this.comparison.duplicate
     }
   },
+  watch: {
+    id(newVal) {
+      if (!newVal || newVal === 0) return
+
+      this.$store.dispatch('getComparison', {
+        id: newVal,
+        callback: () => {}
+      })
+    }
+  },
   methods: {
     goBack() {
-      this.$router.go(-1)
+      this.$emit('close')
     }
   }
 }
