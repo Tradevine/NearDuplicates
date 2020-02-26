@@ -65,9 +65,9 @@ export default new Vuex.Store({
           dispatch('handleError', e, { root: true })
         })
     },
-    getListings({ commit, dispatch }) {
+    getListingsForSeller({ commit, dispatch }, args) {
       api
-        .getListings()
+        .getListingsForSeller(args.seller_id, args.mcat_path)
         .then(response => {
           commit('setListings', response.data)
         })

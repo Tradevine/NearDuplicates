@@ -57,7 +57,7 @@ export default {
     return apiAxios.get(`/Listings/GetSellersForCategory?mcat_path=${mcat_path}`)
   },
   getListingsForSeller(seller_id, mcat_path) {
-    return apiAxios.get(`/Listings/GetListingsForSeller?=seller_id=${seller_id}&mcat_path=${mcat_path}`)
+    return apiAxios.get(`/Listings/GetListingsForSeller?seller_id=${seller_id}&mcat_path=${mcat_path}`)
   },
   getComparison(listing_id) {
     return apiAxios.get(`/Listings/GetComparison?listing_id=${listing_id}`)

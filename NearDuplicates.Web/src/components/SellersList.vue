@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-show="showSellers">
       <v-col class="border">
         <ag-grid-vue style="width: 100%; height: 70vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="sellers" />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-show="showSellerListings">
       <v-col v-if="selected_seller_id > 0">
-        <duplicates-list />
+        <duplicates-list @close="closeSellerListings" />
       </v-col>
     </v-row>
   </v-container>
@@ -33,6 +33,8 @@ export default {
     return {
       components: {},
       selected_seller_id: 0,
+      showSellers: true,
+      showSellerListings: false,
       gridOptions: {
         animateRows: true,
         enableCellTextSelection: true,
@@ -94,6 +96,12 @@ export default {
       if (params.node.selected === false) return
 
       this.selected_seller_id = params.data.seller_id
+      this.showSellerListings = true
+      this.showSellers = false
+    },
+    closeSellerListings() {
+      this.showSellerListings = false
+      this.showSellers = true
     }
   },
   watch: {

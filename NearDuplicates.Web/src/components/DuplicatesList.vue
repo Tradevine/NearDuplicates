@@ -1,7 +1,19 @@
 <template>
-  <div class="list">
-    <ag-grid-vue style="width: 100%; height: 90vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="listings" />
-  </div>
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-btn color="primary light" icon @click="goBack()" title="Back">
+          <v-icon left medium>fa-arrow-circle-left</v-icon>
+          Back to sellers
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <ag-grid-vue style="width: 100%; height: 90vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="listings" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -92,6 +104,9 @@ export default {
   methods: {
     onResize() {
       this.gridOptions.api.sizeColumnsToFit()
+    },
+    goBack() {
+      this.$emit('close')
     },
     selectListing(params) {
       if (params.node.selected === false) return

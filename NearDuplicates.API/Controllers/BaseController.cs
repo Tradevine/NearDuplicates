@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using NearDuplicatesAnalysis.Model.Models;
-using NearDuplicatesAnalysis.Model.Repository;
+﻿using System.Web.Mvc;
+using NearDuplicatesAnalysis.Model.Services;
 
 namespace NearDuplicates.API.Controllers
 {
@@ -12,9 +10,14 @@ namespace NearDuplicates.API.Controllers
             return Request?.HttpMethod == "OPTIONS";
         }
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            DatabaseManager.CheckDatabase();
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
-            filterContext.Result = Json(new { error = filterContext.Exception.Message });
+            filterContext.Result = Json(new { error = filterContext.Exception.Message }, JsonRequestBehavior.AllowGet);
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.StatusCode = 500;
 
