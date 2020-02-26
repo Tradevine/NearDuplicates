@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using NearDuplicatesAnalysis.Model.Models;
@@ -44,7 +45,7 @@ namespace NearDuplicatesAnalysis.Model.Services
 
         private void RemoveListingsFromDb(NearDuplicatesDbContext context, string mcat_path)
         {
-            context.Listings.SqlQuery($"delete from Listings where mcat_path like '@mcat_path%'", new SqlParameter("@mcat_path", mcat_path));
+            context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList().ForEach(y => context.Listings.Remove(y));
         }
 
         private List<Listing> GetNewListingsFromDb(string mcat_path)
@@ -69,9 +70,9 @@ namespace NearDuplicatesAnalysis.Model.Services
                         category_id = results.GetInt32(3),
                         mcat_path = results.GetString(4),
                         title = results.GetString(5),
-                        buy_now_price = results.GetDecimal(6),
+                        buy_now_price = !results.IsDBNull(6) ? results.GetDecimal(6) : (decimal?)null,
                         description = results.GetString(7),
-                        photo_id = results.GetInt32(8)
+                        photo_id = !results.IsDBNull(8) ? results.GetInt32(8) : (int?)null,
                     };
 
                     output.Add(listing);

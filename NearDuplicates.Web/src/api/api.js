@@ -51,7 +51,7 @@ export default {
     return apiAxios.get('/Listings/GetCategories')
   },
   analyzeCategory(mcat_path) {
-    return apiAxios.post(`/Actions/AnalyzeCategory?mcat_path=${mcat_path}`)
+    return apiAxios.post('/Actions/AnalyzeCategory', { mcat_path })
   },
   getSellersForCategory(mcat_path) {
     return apiAxios.get(`/Listings/GetSellersForCategory?mcat_path=${mcat_path}`)
