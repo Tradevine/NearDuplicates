@@ -1,0 +1,107 @@
+<template>
+  <v-container>
+    <v-row>
+      <v-col class="border">
+        <ag-grid-vue style="width: 100%; height: 70vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="sellers" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col v-if="selected_seller_id > 0">
+        <duplicates-list />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+<script>
+import { AgGridVue } from 'ag-grid-vue'
+import DuplicatesList from '@/components/DuplicatesList.vue'
+
+export default {
+  name: 'SellersList',
+  components: {
+    AgGridVue,
+    DuplicatesList
+  },
+  props: {
+    mcat_path: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      components: {},
+      selected_seller_id: 0,
+      gridOptions: {
+        animateRows: true,
+        enableCellTextSelection: true,
+        rowSelection: 'multiple',
+        onRowDoubleClicked: this.selectListing
+      }
+    }
+  },
+  beforeMount() {
+    this.gridOptions.columnDefs = [
+      {
+        headerName: 'Seller ID',
+        field: 'seller_id',
+        cellClass: 'text-xs-left',
+        headerClass: 'text-xs-left',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+        minWidth: 140,
+        maxWidth: 140
+      },
+      {
+        headerName: 'Seller Name',
+        field: 'seller_name',
+        cellClass: 'text-xs-left',
+        headerClass: 'text-xs-left',
+        resizable: true,
+        sortable: true,
+        filter: 'agTextColumnFilter',
+        minWidth: 180,
+        maxWidth: 180
+      },
+      {
+        headerName: 'Number Listings',
+        field: 'listings_count',
+        cellClass: 'text-xs-right',
+        headerClass: 'text-xs-right',
+        resizable: true,
+        sortable: true,
+        sort: 'desc',
+        filter: 'agNumberColumnFilter'
+      }
+    ]
+
+    setTimeout(() => {
+      this.onResize()
+    }, 500)
+  },
+  computed: {
+    sellers() {
+      return this.$store.getters.sellersForCategory
+    }
+  },
+  methods: {
+    onResize() {
+      this.gridOptions.api.sizeColumnsToFit()
+    },
+    selectSeller(params) {
+      if (params.node.selected === false) return
+
+      this.selected_seller_id = params.data.seller_id
+    }
+  },
+  watch: {
+    selected_seller_id(newVal) {
+      this.$store.dispatch('getListingsForSeller', { seller_id: newVal, mcat_path: this.mcat_path })
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss"></style>

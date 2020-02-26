@@ -47,8 +47,17 @@ export default {
   getApiParams() {
     return apiParams
   },
-  getListings() {
-    return apiAxios.get('/Listings/GetDuplicatesList')
+  getCategories() {
+    return apiAxios.get('/Listings/GetCategories')
+  },
+  analyzeCategory(mcat_path) {
+    return apiAxios.post(`/Actions/AnalyzeCategory?mcat_path=${mcat_path}`)
+  },
+  getSellersForCategory(mcat_path) {
+    return apiAxios.get(`/Listings/GetSellersForCategory?mcat_path=${mcat_path}`)
+  },
+  getListingsForSeller(seller_id, mcat_path) {
+    return apiAxios.get(`/Listings/GetListingsForSeller?=seller_id=${seller_id}&mcat_path=${mcat_path}`)
   },
   getComparison(listing_id) {
     return apiAxios.get(`/Listings/GetComparison?listing_id=${listing_id}`)

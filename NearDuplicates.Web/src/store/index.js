@@ -7,6 +7,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    categories: [],
+    sellersForCategory: [],
     listings: [],
     comparison: {
       baseListing: {},
@@ -18,6 +20,12 @@ export default new Vuex.Store({
     snackbarIsError: false
   },
   getters: {
+    categories: state => {
+      return state.categories
+    },
+    sellersForCategory: state => {
+      return state.sellersForCategory
+    },
     listings: state => {
       return state.listings
     },
@@ -26,6 +34,37 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    getCategories({ commit, dispatch }) {
+      api
+        .getCategories()
+        .then(response => {
+          commit('setCategories', response.data)
+        })
+        .catch(e => {
+          dispatch('handleError', e, { root: true })
+        })
+    },
+    getSellersForCategory({ commit, dispatch }, args) {
+      api
+        .getSellersForCategory(args.mcat_path)
+        .then(response => {
+          commit('setSellers', response.data)
+          args.callback()
+        })
+        .catch(e => {
+          dispatch('handleError', e, { root: true })
+        })
+    },
+    analyzeCategory({ dispatch }, args) {
+      api
+        .analyzeCategory(args.mcat_path)
+        .then(() => {
+          args.callback()
+        })
+        .catch(e => {
+          dispatch('handleError', e, { root: true })
+        })
+    },
     getListings({ commit, dispatch }) {
       api
         .getListings()
@@ -55,16 +94,22 @@ export default new Vuex.Store({
     },
 
     handleError(context, error) {
-      if (!error.response || error.response.status !== 400) {
+      if (!error.response) {
         console.error(error)
       }
       context.commit('showSnackbar', true)
-      context.commit('snackbarText', error.response ? error.response.data.Message : 'An error occurred')
+      context.commit('snackbarText', error.response.data ? error.response.data.error : 'An error occurred')
       context.commit('snackbarIsError', true)
       context.commit('showSpinner', false)
     }
   },
   mutations: {
+    setCategories(state, categories) {
+      state.categories = categories
+    },
+    setSellers(state, sellersForCategory) {
+      state.sellersForCategory = sellersForCategory
+    },
     setListings(state, listings) {
       state.listings = listings
     },

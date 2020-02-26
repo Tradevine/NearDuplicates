@@ -62,7 +62,6 @@ export default {
 <style lang="scss" scoped>
 .photo {
   width: 30vw;
-  min-height: 170px;
-  max-height: 170px;
+  max-height: 20vh;
 }
 </style>

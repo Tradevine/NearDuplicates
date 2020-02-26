@@ -5,10 +5,10 @@ namespace NearDuplicatesAnalysis.Model.Services
 {
     public static class AnalyseListings
     {
-        public static void ProcessSeller(int sellerId)
+        public static void ProcessCategory(string mcat_path)
         {
             var context = new NearDuplicatesDbContext();
-            var listings = context.Listings.Where(x => x.seller_id == sellerId).ToList();
+            var listings = context.Listings.Where(x => x.mcat_path.StartsWith(mcat_path)).ToList();
 
             AnalyseListingTitles.ProcessTitles(listings);
             AnalyseListingDescriptions.ProcessDescriptions(listings);
