@@ -1,11 +1,14 @@
 <template>
   <v-container>
     <v-row v-show="!showDuplicate">
-      <v-col>
-        <v-btn color="primary light" icon @click="goBack()" title="Back">
+      <v-col class="py-0 flex-grow-0">
+        <v-btn color="primary light" @click="goBack()" title="Back">
           <v-icon left medium>fa-arrow-circle-left</v-icon>
           Back to sellers
         </v-btn>
+      </v-col>
+      <v-col class="pt-1">
+        <h3>{{ seller_name }} ({{ seller_id }})</h3>
       </v-col>
     </v-row>
     <v-row v-show="!showDuplicate">
@@ -15,7 +18,7 @@
     </v-row>
     <v-row v-show="showDuplicate">
       <v-col>
-        <comparison :id.sync="listing_id" @close="closeDuplicate()" />
+        <comparison :id.sync="listing_id" @close="closeDuplicate()" @next="nextListing()" />
       </v-col>
     </v-row>
   </v-container>
@@ -31,16 +34,27 @@ export default {
     AgGridVue,
     Comparison
   },
+  props: {
+    seller_id: {
+      type: Number,
+      default: 0
+    },
+    seller_name: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       components: {},
       showDuplicate: false,
       listing_id: 0,
+      selectedParams: {},
       gridOptions: {
         animateRows: true,
         enableCellTextSelection: true,
         rowSelection: 'multiple',
-        onRowDoubleClicked: this.selectListing
+        onRowSelected: this.rowSelected
       }
     }
   },
@@ -118,11 +132,24 @@ export default {
     closeDuplicate() {
       this.showDuplicate = false
     },
-    selectListing(params) {
+    rowSelected(params) {
+      this.selectedParams = params
       if (params.node.selected === false) return
-
+      this.setListing(params.data.id)
+    },
+    setListing(id) {
       this.showDuplicate = true
-      this.listing_id = params.data.id
+      this.listing_id = id
+    },
+    nextListing() {
+      this.gridOptions.api.deselectAll()
+
+      this.gridOptions.api.forEachNode(node => {
+        if (node.childIndex === this.selectedParams.node.childIndex + 1) {
+          node.setSelected(true)
+          return
+        }
+      })
     }
   }
 }

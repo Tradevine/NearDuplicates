@@ -1,13 +1,13 @@
 <template>
   <v-container>
     <v-row v-show="showSellers">
-      <v-col class="border">
-        <ag-grid-vue style="width: 100%; height: 70vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="sellers" />
+      <v-col class="border pa-0">
+        <ag-grid-vue style="width: 100%; height: 80vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="sellers" />
       </v-col>
     </v-row>
     <v-row v-show="showSellerListings">
       <v-col v-if="selected_seller_id > 0">
-        <duplicates-list @close="closeSellerListings" />
+        <duplicates-list @close="closeSellerListings" :seller_id.sync="selected_seller_id" :seller_name.sync="selected_seller_name" />
       </v-col>
     </v-row>
   </v-container>
@@ -33,6 +33,7 @@ export default {
     return {
       components: {},
       selected_seller_id: 0,
+      selected_seller_name: '',
       showSellers: true,
       showSellerListings: false,
       gridOptions: {
@@ -96,6 +97,7 @@ export default {
       if (params.node.selected === false) return
 
       this.selected_seller_id = params.data.seller_id
+      this.selected_seller_name = params.data.seller_name
       this.showSellerListings = true
       this.showSellers = false
       this.$emit('showSeller')

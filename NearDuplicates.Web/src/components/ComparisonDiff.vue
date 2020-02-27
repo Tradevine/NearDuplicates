@@ -2,22 +2,44 @@
   <v-container v-if="!!duplicate">
     <v-row>
       <v-col class="d-flex justify-center">
-        <diff-display :baseString.sync="baselisting.title" :compareString.sync="duplicate.title" propertyName="title" />
+        <div class="caption">Title:</div>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col class="d-flex justify-center">
+        <diff-display :baseString.sync="baselisting.title" :compareString.sync="duplicate.title" propertyName="title" />
+      </v-col>
+    </v-row>
+
+    <v-row class="mt-2">
+      <v-col class="d-flex justify-center">
         <div class="caption">Category:</div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col class="d-flex justify-center">
         <span class="subtitle-2" v-show="categoriesIdentical">Same category</span>
         <span class="subtitle-2" v-show="!categoriesIdentical">Different category</span>
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row class="mt-2">
       <v-col class="d-flex justify-center">
         <div class="caption">Price:</div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col class="d-flex justify-center">
         <span class="subtitle-2">{{ priceDiffPercent }}%</span>
+      </v-col>
+    </v-row>
+
+    <v-row class="mt-2">
+      <v-col class="d-flex justify-center">
+        <div class="caption">Description:</div>
       </v-col>
     </v-row>
 

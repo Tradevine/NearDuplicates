@@ -2,9 +2,15 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-btn color="primary light" icon @click="goBack()" title="Back">
+        <v-btn color="primary light" @click="goBack()" title="Back">
           <v-icon left medium>fa-arrow-circle-left</v-icon>
           Back to grid
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-btn color="primary light" @click="nextListing()" title="Next" class="float-right">
+          <v-icon left medium>fa-arrow-circle-right</v-icon>
+          Next listing
         </v-btn>
       </v-col>
     </v-row>
@@ -78,6 +84,9 @@ export default {
   methods: {
     goBack() {
       this.$emit('close')
+    },
+    nextListing() {
+      this.$emit('next')
     }
   }
 }
