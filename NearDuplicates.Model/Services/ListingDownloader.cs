@@ -37,21 +37,31 @@ namespace NearDuplicatesAnalysis.Model.Services
         {
             var context = new NearDuplicatesDbContext();
 
-            RemoveListingsFromDb(context, mcat_path);
-            ProgressManager.UpdateJobPercent(job_id, 5M);
+            ProgressManager.UpdateJobPercent(job_id, 1M);
+
+            RemoveListingsFromDb(context, mcat_path, job_id);
 
             var output = GetNewListingsFromDb(mcat_path);
-            ProgressManager.UpdateJobPercent(job_id, 15M);
+
+            ProgressManager.IncrementJobPercentBy(job_id, 2M);
 
             context.Listings.AddRange(output);
             context.SaveChanges();
 
-            ProgressManager.UpdateJobPercent(job_id, 20M);
+            ProgressManager.IncrementJobPercentBy(job_id, 2M);
         }
 
-        private void RemoveListingsFromDb(NearDuplicatesDbContext context, string mcat_path)
+        private void RemoveListingsFromDb(NearDuplicatesDbContext context, string mcat_path, string job_id)
         {
-            context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList().ForEach(y => context.Listings.Remove(y));
+            var listings = context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList();
+
+            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.2M);
+
+            context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList().ForEach(y =>
+            {
+                context.Listings.Remove(y);
+                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
+            });
         }
 
         private List<Listing> GetNewListingsFromDb(string mcat_path)

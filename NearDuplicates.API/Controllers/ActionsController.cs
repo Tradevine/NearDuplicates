@@ -15,12 +15,15 @@ namespace NearDuplicates.API.Controllers
             new ListingDownloader().RefreshCategory(mcat_path, job_id);
             AnalyseListings.ProcessCategory(mcat_path, job_id);
 
+            ProgressManager.UpdateJobPercent(job_id, 100M);
+
             return Json(string.Empty, JsonRequestBehavior.AllowGet);
         }
 
-        public decimal GetProgress(string job_id)
+        [AcceptVerbs(HttpVerbs.Options | HttpVerbs.Get)]
+        public JsonResult GetJobProgress(string job_id)
         {
-            return  ProgressManager.GetJobPercentProgress(job_id);
+            return  Json(ProgressManager.GetJobPercentProgress(job_id), JsonRequestBehavior.AllowGet);
         }
     }
 }

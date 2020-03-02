@@ -30,7 +30,7 @@
       <v-col>
         <h3 v-show="showSearching">Searching for sellers in this category...</h3>
         <h3 v-show="showAnalyzing">Analyzing duplicates in this category...</h3>
-        <analyze-progress v-show="showAnalyzing" :jobid.sync="jobid" />
+        <analyze-progress v-show="showAnalyzing" :jobid.sync="job_id" />
       </v-col>
     </v-row>
     <v-row>
@@ -59,7 +59,7 @@ export default {
       showGrid: false,
       showButtons: false,
       showSeller: false,
-      jobid: ''
+      job_id: ''
     }
   },
   computed: {
@@ -93,12 +93,12 @@ export default {
     },
     analyzeCategory() {
       this.showGrid = false
+      this.job_id = this.uuidv4()
       this.showAnalyzing = true
-      this.jobid = this.uuidv4()
 
       this.$store.dispatch('analyzeCategory', {
         mcat_path: this.selected_category_mcat,
-        job_id: this.jobid,
+        job_id: this.job_id,
         callback: () => {
           this.showAnalyzing = false
           this.searchCategory()

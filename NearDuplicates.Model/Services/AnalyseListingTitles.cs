@@ -13,15 +13,17 @@ namespace NearDuplicatesAnalysis.Model.Services
 
         public static void ProcessTitles(List<Listing> listings, string job_id)
         {
-            BuildTitleMinHashes(listings);
+            BuildTitleMinHashes(listings, job_id);
             CalculateLshForListingSet(listings, job_id);
         }
 
-        private static void BuildTitleMinHashes(List<Listing> listings)
+        private static void BuildTitleMinHashes(List<Listing> listings, string job_id)
         {
             var universe = new Dictionary<string, int>();
             var wordId = 0;
             var mh = new MinHash(200000, minHashCount);
+
+            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.1M);
 
             // Build ngrams for each listing (if not done already) and save to universe of ngrams
             foreach (var listing in listings.ToList())
@@ -38,7 +40,11 @@ namespace NearDuplicatesAnalysis.Model.Services
                         universe[ngram] = wordId++;
                     }
                 }
+
+                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
             }
+
+            singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.1M);
 
             mh = new MinHash(universe.Count, minHashCount);
 
@@ -55,6 +61,8 @@ namespace NearDuplicatesAnalysis.Model.Services
 
                 // Calculate min hash for each listing
                 listing.minhash_title = mh.GetMinHash(listing.word_ids_title);
+
+                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
             }
         }
 
@@ -79,7 +87,7 @@ namespace NearDuplicatesAnalysis.Model.Services
 
             // Set closes duplicate on each listing
             var duplicatesFound = new Dictionary<long, long>();
-            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.4M);
+            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.1M);
 
             for (int listing = 0; listing < listings.Count; listing++)
             {

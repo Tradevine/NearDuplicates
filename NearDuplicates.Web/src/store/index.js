@@ -90,15 +90,19 @@ export default new Vuex.Store({
           dispatch('handleError', e, { root: true })
         })
     },
-    getJobPercent({ commit, dispatch }, jobid) {
+    getJobPercent({ commit, dispatch }, args) {
       api
-        .getJobPercent(jobid)
+        .getJobPercent(args.jobid)
         .then(response => {
           commit('setJobPercent', response.data)
         })
         .catch(e => {
           dispatch('handleError', e, { root: true })
+          args.error()
         })
+    },
+    clearJobPercent({ commit }) {
+      commit('setJobPercent', 0)
     },
     handleSuccess(context, successMessage) {
       context.commit('showSnackbar', true)

@@ -63,6 +63,6 @@ export default {
     return apiAxios.get(`/Listings/GetComparison?listing_id=${listing_id}`)
   },
   getJobPercent(job_id) {
-    return apiAxios.get(`/Actions/GetJobProgress?jobid=${job_id}`)
+    return apiAxios.get(`/Actions/GetJobProgress?job_id=${job_id}`)
   }
 }

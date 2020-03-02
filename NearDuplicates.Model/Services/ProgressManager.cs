@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace NearDuplicatesAnalysis.Model.Services
@@ -21,7 +22,7 @@ namespace NearDuplicatesAnalysis.Model.Services
             if (!jobs.ContainsKey(id))
                 return 0;
 
-            return jobs[id];
+            return Math.Round(jobs[id], 1);
         }
 
         public static decimal CalculateLoopIncrement(decimal loopTotal, decimal overallComponentPercent)

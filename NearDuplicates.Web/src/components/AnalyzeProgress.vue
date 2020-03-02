@@ -1,8 +1,6 @@
 <template>
   <div class="text-center" v-show="showProgress">
-    <v-progress-circular :rotate="360" :size="400" :width="40" :value="jobPercent" color="teal">
-      {{ jobPercent }}
-    </v-progress-circular>
+    <v-progress-circular :rotate="360" :size="400" :width="40" :value="jobPercent" color="teal"> {{ jobPercent }} % </v-progress-circular>
   </div>
 </template>
 
@@ -12,13 +10,18 @@ export default {
   props: {
     jobid: {
       type: String,
-      default: ''
+      default: function() {
+        return ''
+      }
     }
   },
   data() {
     return {
-      timer: {}
+      timer: null
     }
+  },
+  beforeDestroy() {
+    this.cancelTimer()
   },
   computed: {
     jobPercent() {
@@ -28,7 +31,7 @@ export default {
       return this.jobPercent > 0
     }
   },
-  watchers: {
+  watch: {
     jobid() {
       this.cancelTimer()
       this.startNewTimer()
@@ -41,11 +44,18 @@ export default {
   methods: {
     startNewTimer() {
       this.timer = setInterval(() => {
-        this.$store.dispatch('getJobPercent', this.jobid)
-      }, 1000)
+        this.$store.dispatch('getJobPercent', {
+          jobid: this.jobid,
+          error: () => {
+            this.cancelTimer()
+          }
+        })
+      }, 500)
     },
     cancelTimer() {
-      this.timer.cancel()
+      if (this.timer === null) return
+      clearInterval(this.timer)
+      this.$store.dispatch('clearJobPercent')
     }
   }
 }
