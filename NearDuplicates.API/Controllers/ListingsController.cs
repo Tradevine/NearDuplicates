@@ -27,7 +27,11 @@ namespace NearDuplicates.API.Controllers
 
             var context = new NearDuplicatesDbContext();
 
-            var listings = context.Listings.Where(x => x.mcat_path.StartsWith(mcat_path)).ToList();
+            var listings = context.Listings.Where(x =>
+                x.mcat_path.StartsWith(mcat_path) &&
+                (x.likely_duplicate_id_by_title != null && x.likely_duplicate_id_by_description == x.likely_duplicate_id_by_title))
+                .ToList();
+
             var sellers = listings.GroupBy(x => x.seller_id).ToList();
 
             var output = sellers.Select(x => new
@@ -51,7 +55,7 @@ namespace NearDuplicates.API.Controllers
             var listings = context.Listings.Where(x =>
                     x.seller_id == seller_id &&
                     x.mcat_path.StartsWith(mcat_path) &&
-                    (x.likely_duplicate_id_by_title != null || x.likely_duplicate_id_by_description != null)
+                    (x.likely_duplicate_id_by_title != null && x.likely_duplicate_id_by_description == x.likely_duplicate_id_by_title)
                     ).ToList();
 
             var output = listings.Select(x => new
@@ -61,7 +65,9 @@ namespace NearDuplicates.API.Controllers
                 x.mcat_path,
                 x.seller_id,
                 x.seller_name,
-                x.title
+                x.title,
+                x.similarity_title,
+                x.similarity_description
             });
 
             return Json(output, JsonRequestBehavior.AllowGet);

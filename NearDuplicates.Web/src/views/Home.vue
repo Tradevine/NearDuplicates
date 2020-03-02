@@ -30,6 +30,7 @@
       <v-col>
         <h3 v-show="showSearching">Searching for sellers in this category...</h3>
         <h3 v-show="showAnalyzing">Analyzing duplicates in this category...</h3>
+        <analyze-progress v-show="showAnalyzing" :jobid.sync="jobid" />
       </v-col>
     </v-row>
     <v-row>
@@ -42,11 +43,13 @@
 
 <script>
 import SellersList from '@/components/SellersList.vue'
+import AnalyzeProgress from '@/components/AnalyzeProgress.vue'
 
 export default {
   name: 'Home',
   components: {
-    SellersList
+    SellersList,
+    AnalyzeProgress
   },
   data() {
     return {
@@ -55,7 +58,8 @@ export default {
       showAnalyzing: false,
       showGrid: false,
       showButtons: false,
-      showSeller: false
+      showSeller: false,
+      jobid: ''
     }
   },
   computed: {
@@ -90,13 +94,22 @@ export default {
     analyzeCategory() {
       this.showGrid = false
       this.showAnalyzing = true
+      this.jobid = this.uuidv4()
 
       this.$store.dispatch('analyzeCategory', {
         mcat_path: this.selected_category_mcat,
+        job_id: this.jobid,
         callback: () => {
           this.showAnalyzing = false
           this.searchCategory()
         }
+      })
+    },
+    uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == 'x' ? r : (r & 0x3) | 0x8
+        return v.toString(16)
       })
     }
   }

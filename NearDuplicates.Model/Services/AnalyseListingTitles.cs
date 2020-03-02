@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
 using NearDuplicatesAnalysis.Model.Helpers;
 using NearDuplicatesAnalysis.Model.Models;
 
@@ -12,10 +11,10 @@ namespace NearDuplicatesAnalysis.Model.Services
         private const int ngramLength = 3;
         private const int minHashCount = 200;
 
-        public static void ProcessTitles(List<Listing> listings)
+        public static void ProcessTitles(List<Listing> listings, string job_id)
         {
             BuildTitleMinHashes(listings);
-            CalculateLshForListingSet(listings);
+            CalculateLshForListingSet(listings, job_id);
         }
 
         private static void BuildTitleMinHashes(List<Listing> listings)
@@ -59,7 +58,7 @@ namespace NearDuplicatesAnalysis.Model.Services
             }
         }
 
-        private static void CalculateLshForListingSet(List<Listing> listings)
+        private static void CalculateLshForListingSet(List<Listing> listings, string job_id)
         {
             var numSimilarityBuckets = (int)Math.Ceiling(listings.Count / 100M);
 
@@ -78,8 +77,14 @@ namespace NearDuplicatesAnalysis.Model.Services
             var lsh = new LSH(matrix, numSimilarityBuckets);
             lsh.Calc();
 
+            // Set closes duplicate on each listing
+            var duplicatesFound = new Dictionary<long, long>();
+            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.4M);
+
             for (int listing = 0; listing < listings.Count; listing++)
             {
+                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
+
                 var nearest = lsh.GetNearest(listing);
                 if(!nearest.Any())
                     continue;
@@ -91,8 +96,12 @@ namespace NearDuplicatesAnalysis.Model.Services
                 if(priceRatio < 0.8M || priceRatio > 1.2M)
                     continue;
 
+                if(duplicatesFound.ContainsKey(nearestListing.id))
+                    continue;
+
                 listings[listing].likely_duplicate_id_by_title = nearestListing.id;
                 listings[listing].similarity_title = Jaccard.Calc(ArrayHelpers.GetRow<int>(matrix, listing).ToList(), nearest);
+                duplicatesFound[nearestListing.id] = listings[listing].id;
             }
         }
     }

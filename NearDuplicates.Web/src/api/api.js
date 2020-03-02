@@ -50,8 +50,8 @@ export default {
   getCategories() {
     return apiAxios.get('/Listings/GetCategories')
   },
-  analyzeCategory(mcat_path) {
-    return apiAxios.post('/Actions/AnalyzeCategory', { mcat_path })
+  analyzeCategory(mcat_path, job_id) {
+    return apiAxios.post('/Actions/AnalyzeCategory', { mcat_path, job_id })
   },
   getSellersForCategory(mcat_path) {
     return apiAxios.get(`/Listings/GetSellersForCategory?mcat_path=${mcat_path}`)
@@ -61,5 +61,8 @@ export default {
   },
   getComparison(listing_id) {
     return apiAxios.get(`/Listings/GetComparison?listing_id=${listing_id}`)
+  },
+  getJobPercent(job_id) {
+    return apiAxios.get(`/Actions/GetJobProgress?jobid=${job_id}`)
   }
 }

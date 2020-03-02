@@ -110,6 +110,28 @@ export default {
         resizable: true,
         sortable: true,
         filter: 'agTextColumnFilter'
+      },
+      {
+        headerName: 'Title Rank',
+        field: 'similarity_title',
+        cellClass: 'text-xs-right',
+        headerClass: 'text-xs-right',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+        minWidth: 140,
+        maxWidth: 140
+      },
+      {
+        headerName: 'Description Rank',
+        field: 'similarity_description',
+        cellClass: 'text-xs-right',
+        headerClass: 'text-xs-right',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+        minWidth: 140,
+        maxWidth: 140
       }
     ]
 

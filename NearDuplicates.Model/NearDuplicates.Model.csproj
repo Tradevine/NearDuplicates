@@ -84,6 +84,7 @@
     <Compile Include="Services\AnalyseListingTitles.cs" />
     <Compile Include="Services\DatabaseManager.cs" />
     <Compile Include="Services\ListingDownloader.cs" />
+    <Compile Include="Services\ProgressManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

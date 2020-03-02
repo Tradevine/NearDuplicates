@@ -17,7 +17,8 @@ export default new Vuex.Store({
     showSpinner: false,
     showSnackbar: false,
     snackbarText: '',
-    snackbarIsError: false
+    snackbarIsError: false,
+    jobPercent: 0
   },
   getters: {
     categories: state => {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     comparison: state => {
       return state.comparison
+    },
+    jobPercent: state => {
+      return state.jobPercent
     }
   },
   actions: {
@@ -57,7 +61,7 @@ export default new Vuex.Store({
     },
     analyzeCategory({ dispatch }, args) {
       api
-        .analyzeCategory(args.mcat_path)
+        .analyzeCategory(args.mcat_path, args.job_id)
         .then(() => {
           args.callback()
         })
@@ -81,6 +85,16 @@ export default new Vuex.Store({
         .then(response => {
           commit('setComparison', response.data)
           args.callback()
+        })
+        .catch(e => {
+          dispatch('handleError', e, { root: true })
+        })
+    },
+    getJobPercent({ commit, dispatch }, jobid) {
+      api
+        .getJobPercent(jobid)
+        .then(response => {
+          commit('setJobPercent', response.data)
         })
         .catch(e => {
           dispatch('handleError', e, { root: true })
@@ -115,6 +129,9 @@ export default new Vuex.Store({
     },
     setComparison(state, comparison) {
       state.comparison = comparison
+    },
+    setJobPercent(state, jobPercent) {
+      state.jobPercent = jobPercent
     },
     showSpinner: set('showSpinner'),
     showSnackbar: set('showSnackbar'),

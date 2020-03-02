@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     categoriesIdentical() {
-      return this.baselisting.mcath_path === this.duplicate.mcat_path
+      return this.baselisting.mcat_path === this.duplicate.mcat_path
     },
     priceDiffPercent() {
       return (100 - (this.baselisting.buy_now_price / this.duplicate.buy_now_price) * 100).toFixed(2)

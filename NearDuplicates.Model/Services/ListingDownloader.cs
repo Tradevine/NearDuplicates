@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using NearDuplicatesAnalysis.Model.Models;
@@ -34,13 +33,20 @@ namespace NearDuplicatesAnalysis.Model.Services
             return output;
         }
 
-        public void RefreshCategory(string mcat_path)
+        public void RefreshCategory(string mcat_path, string job_id)
         {
             var context = new NearDuplicatesDbContext();
+
             RemoveListingsFromDb(context, mcat_path);
+            ProgressManager.UpdateJobPercent(job_id, 5M);
+
             var output = GetNewListingsFromDb(mcat_path);
+            ProgressManager.UpdateJobPercent(job_id, 15M);
+
             context.Listings.AddRange(output);
             context.SaveChanges();
+
+            ProgressManager.UpdateJobPercent(job_id, 20M);
         }
 
         private void RemoveListingsFromDb(NearDuplicatesDbContext context, string mcat_path)
