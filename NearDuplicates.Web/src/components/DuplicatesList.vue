@@ -18,7 +18,7 @@
     </v-row>
     <v-row v-show="showDuplicate">
       <v-col>
-        <comparison :id.sync="listing_id" @close="closeDuplicate()" @next="nextListing()" />
+        <comparison :id.sync="listing_id" @close="closeDuplicate()" @next="nextListing()" :end.sync="endOfListings" />
       </v-col>
     </v-row>
   </v-container>
@@ -50,6 +50,7 @@ export default {
       showDuplicate: false,
       listing_id: 0,
       selectedParams: {},
+      endOfListings: false,
       gridOptions: {
         animateRows: true,
         enableCellTextSelection: true,
@@ -149,6 +150,7 @@ export default {
       this.gridOptions.api.sizeColumnsToFit()
     },
     goBack() {
+      this.endOfListings = false
       this.$emit('close')
     },
     closeDuplicate() {
@@ -169,9 +171,14 @@ export default {
       this.gridOptions.api.forEachNode(node => {
         if (node.childIndex === this.selectedParams.node.childIndex + 1) {
           node.setSelected(true)
+          this.endOfListings = false
           return
         }
       })
+
+      if (this.gridOptions.api.getSelectedRows().length === 0) {
+        this.endOfListings = true
+      }
     }
   }
 }

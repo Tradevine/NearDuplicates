@@ -27,6 +27,9 @@ namespace NearDuplicatesAnalysis.Model.Services
 
         public static decimal CalculateLoopIncrement(decimal loopTotal, decimal overallComponentPercent)
         {
+            if (loopTotal == 0)
+                return 0.001M;
+
             return (1M / loopTotal) * 100 * overallComponentPercent;
         }
     }

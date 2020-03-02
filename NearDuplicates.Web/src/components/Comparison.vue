@@ -8,7 +8,7 @@
         </v-btn>
       </v-col>
       <v-col>
-        <v-btn color="primary light" @click="nextListing()" title="Next" class="float-right">
+        <v-btn color="primary light" @click="nextListing()" title="Next" class="float-right" v-show="!end">
           <v-icon left medium>fa-arrow-circle-right</v-icon>
           Next listing
         </v-btn>
@@ -55,6 +55,10 @@ export default {
     id: {
       type: Number,
       default: 0
+    },
+    end: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

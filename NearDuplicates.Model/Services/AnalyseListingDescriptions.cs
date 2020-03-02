@@ -11,10 +11,10 @@ namespace NearDuplicatesAnalysis.Model.Services
         private const int nGramLength = 9;
         private const int minHashCount = 200;
 
-        public static void ProcessDescriptions(List<Listing> listings, string job_id)
+        public static void ProcessDescriptions(List<Listing> listings, string job_id, Dictionary<long, long> duplicates)
         {
             BuildTitleMinHashes(listings, job_id);
-            CalculateLshForListingSet(listings, job_id);
+            CalculateLshForListingSet(listings, job_id, duplicates);
         }
 
         private static void BuildTitleMinHashes(List<Listing> listings, string job_id)
@@ -66,7 +66,7 @@ namespace NearDuplicatesAnalysis.Model.Services
             }
         }
 
-        private static void CalculateLshForListingSet(List<Listing> listings, string job_id)
+        private static void CalculateLshForListingSet(List<Listing> listings, string job_id, Dictionary<long, long> duplicates)
         {
             var numSimilarityBuckets = (int)Math.Ceiling(listings.Count / 100M);
 
@@ -109,6 +109,8 @@ namespace NearDuplicatesAnalysis.Model.Services
 
                 listings[listing].likely_duplicate_id_by_description = nearestListing.id;
                 listings[listing].similarity_description = Jaccard.Calc(ArrayHelpers.GetRow<int>(matrix, listing).ToList(), nearest);
+                duplicates[nearestListing.id] = thisListing.id;
+                duplicates[thisListing.id] = nearestListing.id;
             }
         }
     }

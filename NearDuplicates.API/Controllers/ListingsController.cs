@@ -58,7 +58,10 @@ namespace NearDuplicates.API.Controllers
                     (x.likely_duplicate_id_by_title != null && x.likely_duplicate_id_by_description == x.likely_duplicate_id_by_title)
                     ).ToList();
 
-            var output = listings.Select(x => new
+            var output = listings
+                .OrderByDescending(a => a.similarity_title)
+                .ThenByDescending(b => b.similarity_description)
+                .Select(x => new
             {
                 x.id,
                 x.category_id,
