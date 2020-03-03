@@ -76,6 +76,10 @@ export default {
       this.showButtons = !!newVal && newVal.length > 0
       this.showSearching = false
       this.showAnalyzing = false
+
+      if (this.showButtons) {
+        this.searchCategory()
+      }
     }
   },
   methods: {

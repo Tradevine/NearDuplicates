@@ -12,6 +12,10 @@
           <v-icon left medium>fa-arrow-circle-right</v-icon>
           Next listing
         </v-btn>
+        <v-btn color="primary light" @click="previousListing()" title="Previous" class="mr-3 float-right" v-show="!start">
+          <v-icon left medium>fa-arrow-circle-left</v-icon>
+          Prev listing
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -56,6 +60,10 @@ export default {
       type: Number,
       default: 0
     },
+    start: {
+      type: Boolean,
+      default: true
+    },
     end: {
       type: Boolean,
       default: false
@@ -91,6 +99,9 @@ export default {
     },
     nextListing() {
       this.$emit('next')
+    },
+    previousListing() {
+      this.$emit('previous')
     }
   }
 }

@@ -18,7 +18,14 @@
     </v-row>
     <v-row v-show="showDuplicate">
       <v-col>
-        <comparison :id.sync="listing_id" @close="closeDuplicate()" @next="nextListing()" :end.sync="endOfListings" />
+        <comparison
+          :id.sync="listing_id"
+          @close="closeDuplicate()"
+          @next="nextListing()"
+          @previous="previousListing()"
+          :start.sync="startOfListings"
+          :end.sync="endOfListings"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -50,6 +57,7 @@ export default {
       showDuplicate: false,
       listing_id: 0,
       selectedParams: {},
+      startOfListings: true,
       endOfListings: false,
       gridOptions: {
         animateRows: true,
@@ -150,6 +158,7 @@ export default {
       this.gridOptions.api.sizeColumnsToFit()
     },
     goBack() {
+      this.startOfListings = true
       this.endOfListings = false
       this.$emit('close')
     },
@@ -159,6 +168,8 @@ export default {
     rowSelected(params) {
       this.selectedParams = params
       if (params.node.selected === false) return
+      this.startOfListings = params.node.childIndex === 0
+      this.endOfListings = params.node.childIndex === this.listings.length - 1
       this.setListing(params.data.id)
     },
     setListing(id) {
@@ -166,19 +177,24 @@ export default {
       this.listing_id = id
     },
     nextListing() {
+      this.searchForIndex(1)
+      this.startOfListings = false
+      this.endOfListings = this.gridOptions.api.getSelectedRows().length === 0
+    },
+    previousListing() {
+      this.searchForIndex(-1)
+      this.endOfListings = false
+      this.startOfListings = this.gridOptions.api.getSelectedRows().length === 0
+    },
+    searchForIndex(delta) {
       this.gridOptions.api.deselectAll()
 
       this.gridOptions.api.forEachNode(node => {
-        if (node.childIndex === this.selectedParams.node.childIndex + 1) {
+        if (node.childIndex === this.selectedParams.node.childIndex + delta) {
           node.setSelected(true)
-          this.endOfListings = false
           return
         }
       })
-
-      if (this.gridOptions.api.getSelectedRows().length === 0) {
-        this.endOfListings = true
-      }
     }
   }
 }
