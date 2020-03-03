@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-resize="onResize">
     <v-row v-show="showSellers">
       <v-col class="border pa-0">
         <ag-grid-vue style="width: 100%; height: 80vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="sellers" />

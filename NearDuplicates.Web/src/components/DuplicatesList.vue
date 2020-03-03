@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-resize="onResize">
     <v-row v-show="!showDuplicate">
       <v-col class="py-0 flex-grow-0">
         <v-btn color="primary light" @click="goBack()" title="Back">
@@ -13,7 +13,7 @@
     </v-row>
     <v-row v-show="!showDuplicate">
       <v-col>
-        <ag-grid-vue style="width: 100%; height: 90vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="listings" />
+        <ag-grid-vue style="width: 100%; height: 85vh" class="ag-theme-material" :components="components" :grid-options="gridOptions" :row-data="listings" />
       </v-col>
     </v-row>
     <v-row v-show="showDuplicate">
