@@ -13,15 +13,27 @@
           autocomplete="off"
           v-model="selected_category_mcat"
           placeholder="Select a category..."
+          :disabled="categoryDisabled"
           solo-inverted
           clearable
           class="py-0"
+          :class="categoryClass"
         ></v-autocomplete>
+        <span class="ma-3"> or </span>
+        <v-text-field
+          v-model="selected_seller_id"
+          placeholder="Enter a seller ID..."
+          solo-inverted
+          clearable
+          class="py-0"
+          :disabled="sellerDisabled"
+          :class="sellerClass"
+        ></v-text-field>
         <v-btn color="primary light" class="ml-3 mt-2" v-if="showButtons" @click="searchCategory()">
           <v-icon left small>fa fa-search</v-icon>
           Search
         </v-btn>
-        <v-btn color="secondary light" class="ml-3 mt-2" v-if="showButtons" @click="analyzeCategory()">
+        <v-btn color="secondary light" class="ml-3 mt-2" v-if="showButtons" @click="analyze()">
           <v-icon left small>fa fa-cog</v-icon>Download and Analyze
         </v-btn>
       </v-col>
@@ -54,6 +66,7 @@ export default {
   data() {
     return {
       selected_category_mcat: '',
+      selected_seller_id: '',
       showSearching: false,
       showAnalyzing: false,
       showGrid: false,
@@ -65,6 +78,23 @@ export default {
   computed: {
     categories() {
       return this.$store.getters.categories
+    },
+    sellersInTrade() {
+      return this.$store.getters.sellersInTrade
+    },
+    categoryDisabled() {
+      return !!this.selected_seller_id && !!this.selected_seller_id.length > 0
+    },
+    categoryClass() {
+      if (this.categoryDisabled) return 'faded'
+      return ''
+    },
+    sellerDisabled() {
+      return !!this.selected_category_mcat && !!this.selected_category_mcat > 0
+    },
+    sellerClass() {
+      if (this.sellerDisabled) return 'faded'
+      return ''
     }
   },
   created() {
@@ -72,6 +102,42 @@ export default {
   },
   watch: {
     selected_category_mcat(newVal) {
+      this.searchInputs(newVal)
+    },
+    selected_seller_id(newVal) {
+      this.searchInputs(newVal)
+    }
+  },
+  methods: {
+    searchCategory() {
+      this.showGrid = false
+      this.showSearching = true
+
+      this.$store.dispatch('getSellers', {
+        mcat_path: this.selected_category_mcat ? this.selected_category_mcat : '',
+        seller_id: this.selected_seller_id ? this.selected_seller_id : '',
+        callback: () => {
+          this.showSearching = false
+          this.showGrid = true
+        }
+      })
+    },
+    analyze() {
+      this.showGrid = false
+      this.job_id = this.uuidv4()
+      this.showAnalyzing = true
+
+      this.$store.dispatch('analyze', {
+        mcat_path: this.selected_category_mcat ? this.selected_category_mcat : '',
+        seller_id: this.selected_seller_id ? this.selected_seller_id : '',
+        job_id: this.job_id,
+        callback: () => {
+          this.showAnalyzing = false
+          this.searchCategory()
+        }
+      })
+    },
+    searchInputs(newVal) {
       this.showGrid = false
       this.showButtons = !!newVal && newVal.length > 0
       this.showSearching = false
@@ -80,34 +146,6 @@ export default {
       if (this.showButtons) {
         this.searchCategory()
       }
-    }
-  },
-  methods: {
-    searchCategory() {
-      this.showGrid = false
-      this.showSearching = true
-
-      this.$store.dispatch('getSellersForCategory', {
-        mcat_path: this.selected_category_mcat,
-        callback: () => {
-          this.showSearching = false
-          this.showGrid = true
-        }
-      })
-    },
-    analyzeCategory() {
-      this.showGrid = false
-      this.job_id = this.uuidv4()
-      this.showAnalyzing = true
-
-      this.$store.dispatch('analyzeCategory', {
-        mcat_path: this.selected_category_mcat,
-        job_id: this.job_id,
-        callback: () => {
-          this.showAnalyzing = false
-          this.searchCategory()
-        }
-      })
     },
     uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -119,3 +157,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.faded {
+  opacity: 0.3;
+}
+</style>

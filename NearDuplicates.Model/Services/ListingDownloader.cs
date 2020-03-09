@@ -45,17 +45,54 @@ namespace NearDuplicatesAnalysis.Model.Services
 
             ProgressManager.IncrementJobPercentBy(job_id, 2M);
 
-            context.Listings.AddRange(output);
-            context.SaveChanges();
+            AddBackToDatabase(context, output, job_id);
 
             ProgressManager.IncrementJobPercentBy(job_id, 2M);
         }
 
+        public void RefreshSeller(int seller_id, string job_id)
+        {
+            var context = new NearDuplicatesDbContext();
+
+            ProgressManager.UpdateJobPercent(job_id, 1M);
+
+            RemoveListingsFromDb(context, seller_id, job_id);
+
+            var output = GetNewListingsFromDb(seller_id);
+
+            ProgressManager.IncrementJobPercentBy(job_id, 2M);
+
+            AddBackToDatabase(context, output, job_id);
+
+            ProgressManager.IncrementJobPercentBy(job_id, 2M);
+        }
+
+        private void AddBackToDatabase(NearDuplicatesDbContext context, List<Listing> listings, string job_id)
+        {
+            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.05M);
+
+            foreach (var listing in listings)
+            {
+                var existing = context.Listings.Find(listing.id);
+
+                if (existing != null)
+                {
+                    context.Listings.Remove(existing);
+                }
+
+                context.Listings.Add(listing);
+
+                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
+            }
+            context.SaveChanges();
+
+        }
+
         private void RemoveListingsFromDb(NearDuplicatesDbContext context, string mcat_path, string job_id)
         {
-            var listings = context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList();
+            var listingCount = context.Listings.AsQueryable().Count(x => x.mcat_path.StartsWith(mcat_path));
 
-            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.2M);
+            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listingCount, 0.2M);
 
             context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList().ForEach(y =>
             {
@@ -64,18 +101,36 @@ namespace NearDuplicatesAnalysis.Model.Services
             });
         }
 
+        private void RemoveListingsFromDb(NearDuplicatesDbContext context, int seller_id, string job_id)
+        {
+            var listingCount = context.Listings.AsQueryable().Count(x => x.seller_id == seller_id);
+
+            context.Listings.RemoveRange(context.Listings.AsQueryable().Where(x => x.seller_id == seller_id));
+
+            ProgressManager.IncrementJobPercentBy(job_id, 0.2M);
+        }
+
         private List<Listing> GetNewListingsFromDb(string mcat_path)
+        {
+            return GetNewListingsFromQuery(GetListingsQuery(mcat_path));
+        }
+
+        private List<Listing> GetNewListingsFromDb(int seller_id)
+        {
+            return GetNewListingsFromQuery(GetListingsQuery(seller_id));
+        }
+
+        private List<Listing> GetNewListingsFromQuery(string query)
         {
             var output = new List<Listing>();
 
             var connection = new SqlConnection(connectionString);
             connection.Open();
 
-            var query = GetListingsQuery(mcat_path);
-
             using (var cmd = new SqlCommand(query, connection))
             {
                 var results = cmd.ExecuteReader();
+
                 while (results.Read())
                 {
                     var listing = new Listing
@@ -102,7 +157,17 @@ namespace NearDuplicatesAnalysis.Model.Services
 
         private string GetListingsQuery(string mcat_path)
         {
-            return $"select a.auctionid, a.memberId, m.Nickname, a.categoryid, c.mcat_path, a.title,a.BuyNowPrice,ad.Body,isnull(a.photo_id, 0) as photo_id from dbo.auction a with (nolock)join dbo.member m with (nolock) on m.MemberId = a.MemberId join dbo.category c with (nolock) on c.CategoryId = a.CategoryId join dbo.auction_description ad with (nolock) on ad.auctionid = a.auctionid where c.mcat_path like '{mcat_path}%'";
+            return $"{GetBaseQuery()} where c.mcat_path like '{mcat_path}%'";
+        }
+
+        private string GetListingsQuery(int seller_id)
+        {
+            return $"{GetBaseQuery()} where a.memberid = {seller_id}";
+        }
+
+        private string GetBaseQuery()
+        {
+            return $"select a.auctionid, a.memberId, m.Nickname, a.categoryid, c.mcat_path, a.title,a.BuyNowPrice,ad.Body,isnull(a.photo_id, 0) as photo_id from dbo.auction a with (nolock)join dbo.member m with (nolock) on m.MemberId = a.MemberId join dbo.category c with (nolock) on c.CategoryId = a.CategoryId join dbo.auction_description ad with (nolock) on ad.auctionid = a.auctionid";
         }
     }
 }

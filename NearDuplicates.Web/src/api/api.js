@@ -50,11 +50,11 @@ export default {
   getCategories() {
     return apiAxios.get('/Listings/GetCategories')
   },
-  analyzeCategory(mcat_path, job_id) {
-    return apiAxios.post('/Actions/AnalyzeCategory', { mcat_path, job_id })
+  analyze(mcat_path, seller_id, job_id) {
+    return apiAxios.post('/Actions/Analyze', { mcat_path, seller_id, job_id })
   },
-  getSellersForCategory(mcat_path) {
-    return apiAxios.get(`/Listings/GetSellersForCategory?mcat_path=${mcat_path}`)
+  getSellers(mcat_path, seller_id) {
+    return apiAxios.get(`/Listings/GetSellers?mcat_path=${mcat_path}&seller_id=${seller_id}`)
   },
   getListingsForSeller(seller_id, mcat_path) {
     return apiAxios.get(`/Listings/GetListingsForSeller?seller_id=${seller_id}&mcat_path=${mcat_path}`)

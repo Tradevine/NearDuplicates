@@ -48,9 +48,9 @@ export default new Vuex.Store({
           dispatch('handleError', e, { root: true })
         })
     },
-    getSellersForCategory({ commit, dispatch }, args) {
+    getSellers({ commit, dispatch }, args) {
       api
-        .getSellersForCategory(args.mcat_path)
+        .getSellers(args.mcat_path, args.seller_id)
         .then(response => {
           commit('setSellers', response.data)
           args.callback()
@@ -59,9 +59,9 @@ export default new Vuex.Store({
           dispatch('handleError', e, { root: true })
         })
     },
-    analyzeCategory({ dispatch }, args) {
+    analyze({ dispatch }, args) {
       api
-        .analyzeCategory(args.mcat_path, args.job_id)
+        .analyze(args.mcat_path, args.seller_id, args.job_id)
         .then(() => {
           args.callback()
         })

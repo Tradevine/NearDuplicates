@@ -20,7 +20,7 @@ namespace NearDuplicates.API.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Options | HttpVerbs.Get)]
-        public JsonResult GetSellersForCategory(string mcat_path)
+        public JsonResult GetSellers(string mcat_path, int? seller_id)
         {
             if(IsPreFlight())
                 return new JsonResult();
@@ -28,7 +28,8 @@ namespace NearDuplicates.API.Controllers
             var context = new NearDuplicatesDbContext();
 
             var listings = context.Listings.Where(x =>
-                x.mcat_path.StartsWith(mcat_path) &&
+                (string.IsNullOrEmpty(mcat_path) || x.mcat_path.StartsWith(mcat_path)) &&
+                (seller_id == null || x.seller_id == seller_id.Value) &&
                 (x.likely_duplicate_id_by_title != null && x.likely_duplicate_id_by_description == x.likely_duplicate_id_by_title))
                 .ToList();
 
