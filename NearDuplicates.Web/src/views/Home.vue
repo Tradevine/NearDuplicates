@@ -40,8 +40,8 @@
     </v-row>
     <v-row class="mt-2" v-show="showSearching || showAnalyzing">
       <v-col>
-        <h3 v-show="showSearching">Searching for sellers in this category...</h3>
-        <h3 v-show="showAnalyzing">Analyzing duplicates in this category...</h3>
+        <h3 v-show="showSearching">Searching for seller(s)...</h3>
+        <h3 v-show="showAnalyzing">Analyzing duplicates...</h3>
         <analyze-progress v-show="showAnalyzing" :jobid.sync="job_id" />
       </v-col>
     </v-row>

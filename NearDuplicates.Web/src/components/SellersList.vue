@@ -40,7 +40,8 @@ export default {
         animateRows: true,
         enableCellTextSelection: true,
         rowSelection: 'multiple',
-        onRowSelected: this.selectSeller
+        onRowSelected: this.selectSeller,
+        onRowDoubleClicked: this.selectSeller
       }
     }
   },

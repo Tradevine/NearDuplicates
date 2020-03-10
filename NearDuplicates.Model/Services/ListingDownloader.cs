@@ -43,11 +43,11 @@ namespace NearDuplicatesAnalysis.Model.Services
 
             var output = GetNewListingsFromDb(mcat_path);
 
-            ProgressManager.IncrementJobPercentBy(job_id, 2M);
+            ProgressManager.IncrementJobPercentBy(job_id, 5M);
 
             AddBackToDatabase(context, output, job_id);
 
-            ProgressManager.IncrementJobPercentBy(job_id, 2M);
+            ProgressManager.IncrementJobPercentBy(job_id, 5M);
         }
 
         public void RefreshSeller(int seller_id, string job_id)
@@ -60,54 +60,27 @@ namespace NearDuplicatesAnalysis.Model.Services
 
             var output = GetNewListingsFromDb(seller_id);
 
-            ProgressManager.IncrementJobPercentBy(job_id, 2M);
+            ProgressManager.IncrementJobPercentBy(job_id, 5M);
 
             AddBackToDatabase(context, output, job_id);
 
-            ProgressManager.IncrementJobPercentBy(job_id, 2M);
+            ProgressManager.IncrementJobPercentBy(job_id, 5M);
         }
 
         private void AddBackToDatabase(NearDuplicatesDbContext context, List<Listing> listings, string job_id)
         {
-            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listings.Count(), 0.05M);
-
-            foreach (var listing in listings)
-            {
-                var existing = context.Listings.Find(listing.id);
-
-                if (existing != null)
-                {
-                    context.Listings.Remove(existing);
-                }
-
-                context.Listings.Add(listing);
-
-                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
-            }
+            context.Listings.AddRange(listings);
             context.SaveChanges();
-
         }
 
         private void RemoveListingsFromDb(NearDuplicatesDbContext context, string mcat_path, string job_id)
         {
-            var listingCount = context.Listings.AsQueryable().Count(x => x.mcat_path.StartsWith(mcat_path));
-
-            var singleItemProgress = ProgressManager.CalculateLoopIncrement(listingCount, 0.2M);
-
-            context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)).ToList().ForEach(y =>
-            {
-                context.Listings.Remove(y);
-                ProgressManager.IncrementJobPercentBy(job_id, singleItemProgress);
-            });
+            context.Listings.RemoveRange(context.Listings.AsQueryable().Where(x => x.mcat_path.StartsWith(mcat_path)));
         }
 
         private void RemoveListingsFromDb(NearDuplicatesDbContext context, int seller_id, string job_id)
         {
-            var listingCount = context.Listings.AsQueryable().Count(x => x.seller_id == seller_id);
-
             context.Listings.RemoveRange(context.Listings.AsQueryable().Where(x => x.seller_id == seller_id));
-
-            ProgressManager.IncrementJobPercentBy(job_id, 0.2M);
         }
 
         private List<Listing> GetNewListingsFromDb(string mcat_path)
